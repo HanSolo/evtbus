@@ -1,5 +1,8 @@
 package eu.hansolo.evtbus.example;
 
+import eu.hansolo.evtbus.Topic;
+
+
 public class MyTopic implements Topic {
     private String name;
 

@@ -1,7 +1,6 @@
 import java.text.SimpleDateFormat
 
 plugins {
-    id 'java-library'
     id 'application'
     id 'maven-publish'
     id 'signing'

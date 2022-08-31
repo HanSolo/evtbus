@@ -1,4 +1,4 @@
-package eu.hansolo.evtbus.example;
+package eu.hansolo.evtbus;
 
 @FunctionalInterface
 public interface Topic {

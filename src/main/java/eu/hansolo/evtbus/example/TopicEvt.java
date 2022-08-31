@@ -1,5 +1,6 @@
 package eu.hansolo.evtbus.example;
 
+import eu.hansolo.evtbus.Topic;
 import eu.hansolo.toolbox.evt.EvtType;
 import eu.hansolo.toolbox.evt.type.ChangeEvt;
 
@@ -14,18 +15,17 @@ public class TopicEvt extends ChangeEvt {
     private final Msg msg;
 
 
-    public TopicEvt(final Topic src, final EvtType<TopicEvt> evtType, final Msg msg) {
+    // ******************** Constructors **************************************
+    public TopicEvt(final Object src, final EvtType<TopicEvt> evtType, final Msg msg) {
         super(src, evtType);
         this.msg = msg;
     }
 
 
-    public Topic getTopic() { return (Topic) getSource(); }
-
-    public Msg getMsg() { return msg; }
-
 
     // ******************** Methods *******************************************
+    public Msg getMsg() { return msg; }
+
     @Override public EvtType<? extends TopicEvt> getEvtType() { return (EvtType<? extends TopicEvt>) super.getEvtType(); }
 
     @Override public boolean equals(final Object o) {

@@ -8,16 +8,15 @@ public class Demo {
         MyTopic topic1 = new MyTopic("Topic 1");
         MyTopic topic2 = new MyTopic("Topic 2");
 
-        TopicSubscriber subscriber1 = new TopicSubscriber(TopicEvt.NEW_MSG);
-        TopicSubscriber subscriber2 = new TopicSubscriber(TopicEvt.UPDATE_MSG);
+        TopicSubscriber newMsgSubscriber = new TopicSubscriber("newMsgSubscriber", TopicEvt.NEW_MSG);
+        TopicSubscriber updateSubscriber = new TopicSubscriber("updateSubscriber", TopicEvt.UPDATE_MSG);
 
-        eventBus.subscribe(subscriber1);
-        eventBus.subscribe(subscriber2);
+        eventBus.subscribe(topic1, newMsgSubscriber);
+        eventBus.subscribe(topic2, updateSubscriber);
 
-        eventBus.publish(new TopicEvt(topic1, TopicEvt.NEW_MSG, new Msg("New Msg")));
-        eventBus.publish(new TopicEvt(topic2, TopicEvt.UPDATE_MSG, new Msg("Update Msg")));
-        eventBus.publish(new TopicEvt(topic2, TopicEvt.NEW_MSG, new Msg("New Msg")));
-        eventBus.publish(new TopicEvt(topic1, TopicEvt.UPDATE_MSG, new Msg("Update Msg")));
+        eventBus.publish(topic1, new TopicEvt(eventBus, TopicEvt.NEW_MSG, new Msg("New Msg")));
+        eventBus.publish(topic1, new TopicEvt(eventBus, TopicEvt.UPDATE_MSG, new Msg("Update Msg")));
+        eventBus.publish(topic2, new TopicEvt(eventBus, TopicEvt.UPDATE_MSG, new Msg("Update Msg")));
     }
 
 
