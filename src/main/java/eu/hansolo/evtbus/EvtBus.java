@@ -1,17 +1,13 @@
 package eu.hansolo.evtbus;
 
-public class EvtBus implements EventBus {
+import eu.hansolo.toolbox.evt.Evt;
 
-    private Group eventHandlers = new Group();
 
-    @Override public <T extends Evt> Subscriber addEventHandler(EvtType<T> eventType, EvtObserver<? super T> eventHandler) {
-        eventHandlers.addEventHandler(eventType, eventHandler);
-        return new Subscriber(this, eventType, (EventHandler<? super Evt>) eventHandler);
-    }
+public interface EvtBus {
 
-    @Override public <T extends Evt> void removeEventHandler(EvtType<T> eventType, EvtObserver<? super T> eventHandler) {
-        eventHandlers.removeEventHandler(eventType, eventHandler);
-    }
+    <T extends Evt> void publish(T evt);
 
-    @Override public void fireEvent(Evt event) { eventHandlers.fireEvent(event); }
+    void subscribe(Subscriber subscriber);
+
+    void unsubscribe(Subscriber subscriber);
 }

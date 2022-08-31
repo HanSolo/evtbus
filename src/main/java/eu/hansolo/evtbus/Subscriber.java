@@ -1,17 +1,12 @@
 package eu.hansolo.evtbus;
 
-public final class Subscriber {
-
-    private EventBus                    eventBus;
-    private EvtType<? extends Evt>  eventType;
-    private EvtObserver<? super Evt> eventHandler;
+import eu.hansolo.toolbox.evt.Evt;
+import eu.hansolo.toolbox.evt.EvtType;
 
 
-    Subscriber(final EventBus EVENT_BUS, final EvtType<? extends Evt> TYPE, final EvtObserver<? super Evt> HANDLER) {
-        eventBus     = EVENT_BUS;
-        eventType    = TYPE;
-        eventHandler = HANDLER;
-    }
+public interface Subscriber {
 
-    public void unsubscribe() { eventBus.removeEventHandler(eventType, eventHandler); }
+    EvtType<Evt> getEvtType();
+
+    void handle(Evt evt);
 }

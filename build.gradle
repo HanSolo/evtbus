@@ -2,6 +2,7 @@ import java.text.SimpleDateFormat
 
 plugins {
     id 'java-library'
+    id 'application'
     id 'maven-publish'
     id 'signing'
     id 'org.javamodularity.moduleplugin' version '1.8.12'
@@ -11,6 +12,8 @@ plugins {
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+application.mainModule = 'eu.hansolo.evtbus'
+mainClassName          = 'eu.hansolo.evtbus.example.Demo'
 description = 'evtbus is a simple eventbus'
 
 Date buildTimeAndDate = new Date()
@@ -31,7 +34,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'eu.hansolo:toolboxfx:17.0.31'
+    implementation 'eu.hansolo:toolbox:17.0.29'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
@@ -64,8 +68,9 @@ jar {
                 'Bundle-License'        : 'https://www.apache.org/licenses/LICENSE-2.0;description=Apache License Version 2.0;link=https://spdx.org/licenses/Apache-2.0.html',
                 'Bundle-Description'    : description,
                 'Bundle-SymbolicName'   : 'eu.hansolo.evtbus',
-                'Export-Package'        : 'eu.hansolo.evtbus',
-                'Class-Path'            : configurations.runtimeClasspath.files.collect { it.getName() }.join(' ')
+                'Export-Package'        : 'eu.hansolo.evtbus, eu.hansolo.evt.bus.example',
+                'Class-Path'            : '${project.name}-${project.version}.jar',
+                'Main-Class'            : 'eu.hansolo.evtbus.example.Demo'
         )
     }
 }
@@ -157,11 +162,37 @@ publishing {
         }
         maven {
             name = "GitHubPackages"
-            url  = "https://maven.pkg.github.com/HanSolo/ps"
+            url  = "https://maven.pkg.github.com/HanSolo/evtbus"
             credentials {
                 username = null == ciGHUser  ? ghUser  : ciGHUser
                 password = null == ciGHToken ? ghToken : ciGHToken
             }
         }
+    }
+}
+
+
+// start the from gradle
+task Main(type: JavaExec) {
+    mainClass = "eu.hansolo.evtbus.example.Demo"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+
+// Fix problems with loading resources
+sourceSets {
+    main {
+        output.setResourcesDir(java.classesDirectory)
+    }
+}
+
+run {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        jvmArgs = [
+                '--module-path', classpath.asPath,
+                '--module', mainClassName
+        ]
+        classpath = files()
     }
 }
